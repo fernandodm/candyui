@@ -1,5 +1,7 @@
 package windows;
 
+import java.awt.Color;
+
 import org.uqbar.arena.actions.MessageSend;
 import org.uqbar.arena.bindings.ObservableProperty;
 import org.uqbar.arena.bindings.PropertyAdapter;
@@ -42,49 +44,68 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 	    editorPanel.setLayout(new ColumnLayout(2));
 	    
 	    new Label(editorPanel)
-	    	.setText("Nombre:");
+	    	.setText("Nombre del mundo:");
 	    
 	    new TextBox(editorPanel)
+	    	.setWidth(150)
 	    	.bindValueToProperty("mundo.nombre");
 	    
-	   // Panel nivelPanel = new Panel(mainPanel);
-	    
 	    //Panel para crear el nivel
-	   // final Panel editorPanelNivel = nivelPanel;
+	    Panel nivelPanel = new Panel(mainPanel);
 	    
-	   // editorPanelNivel.setLayout(new ColumnLayout(2));
+	    new Label(nivelPanel)
+	    	.setText("Niveles:")
+	    	.setForeground(Color.BLUE)
+	    	.setFontSize(12);
 	    
-	  // new Label(editorPanel)
-	    	//.setText("Niveles:");
+	    //Ingresar la configuacion del nivel
+	    Panel datosNivelPanel = new Panel(mainPanel);
+	    datosNivelPanel.setLayout(new ColumnLayout(2));
 	    
-	    new Label(editorPanel)
+	    new Label(datosNivelPanel)
+    		.setText("Nombre del nivel:");
+	    
+	    new TextBox(datosNivelPanel)
+	    	.setWidth(150)
+    		.bindValueToProperty("nivelEnConstruccion.nombre");
+	    
+	    new Label(datosNivelPanel)
 	    	.setText("Dificultad:");
 	    
-	    Selector<Dificultad> selector = new Selector<Dificultad>(editorPanel) //
+	    Selector<Dificultad> selector = new Selector<Dificultad>(datosNivelPanel) //
 				.allowNull(false);
 		selector.bindValueToProperty("nivelEnConstruccion.dificultad");
+		
+		selector.bindItemsToProperty("dificultades")
+			.setAdapter(new PropertyAdapter(Dificultad.class, "nombre"));
 			
-		selector.bindValueToProperty("dificultades")
-			.setAdapter(new PropertyAdapter(Dificultad.class, "getNombre"));
-
-	 
+		
 	    ////////////////
-	  /**  
-	    new Label(editorPanel)
-	        .setText("Fila:");
 	    
-	    new TextBox(editorPanel)
+		Panel tableroPanel = new Panel(mainPanel);
+		tableroPanel.setLayout(new ColumnLayout(5));
+		
+		new Label(tableroPanel)
+        	.setText("Tablero-")
+			.setForeground(Color.BLUE)
+			.setFontSize(10)
+			.setHeigth(20);
+		
+	    new Label(tableroPanel)
+	        .setText("Filas:");
+	    
+	    new TextBox(tableroPanel)
 	       .setWidth(50)
-	       .<ControlBuilder>bindValueToProperty("alto");
+	       .<ControlBuilder>bindValueToProperty("tablero.alto");
 	    
-	    new Label(editorPanel)
-	    	.setText("Columna:");
+	    new Label(tableroPanel)
+	    	.setText("Columnas:");
     
-	    new TextBox(editorPanel)
+	    new TextBox(tableroPanel)
 	    	.setWidth(50)
-	    	.<ControlBuilder>bindValueToProperty("ancho");
+	    	.<ControlBuilder>bindValueToProperty("tablero.ancho");
 	    
-	    
+	    /**
 	    Selector<Dificultad> selector = new Selector<Dificultad>(editorPanel) //
 				.allowNull(false);
 //		selector.bindValueToProperty("dificultad");
