@@ -45,7 +45,7 @@ public class TableroAppModel {
 	public void iniciar(){
 		tablero.setAlto(alto);
 		tablero.setAncho(ancho);
-		tablero.setUnNivel(nivel);
+		tablero.setNivel(nivel);
 		
 		tablero.iniciar();
 	}
