@@ -15,13 +15,19 @@ public class MundoAppModel {
 	private Nivel nivelEnConstruccion;
 	private List<Dificultad> dificultades = Dificultad.getDificultades();
 	private Tablero tablero;
+	private List<Nivel> losNiveles;
 	
 	public MundoAppModel(){
 		mundo = new Mundo();
+		Nivel n = new Nivel();
+		n.setNombre("Mundo de chocolate");
+		mundo.agregarNivel(n);
+		mundo.agregarNivel(n);
 		nivelEnConstruccion = new Nivel();
 		tablero = new Tablero();
 		nivelEnConstruccion.setTablero(tablero);
 		tablero.setNivel(nivelEnConstruccion);
+		setLosNiveles(mundo.getNiveles());
 	}
 	
 	
@@ -53,5 +59,23 @@ public class MundoAppModel {
 	}
 	public void setNivelEnConstruccion(Nivel nivelEnConstruccion) {
 		this.nivelEnConstruccion = nivelEnConstruccion;
+	}
+
+
+	public List<Nivel> getLosNiveles() {
+		return losNiveles;
+	}
+
+
+	public void setLosNiveles(List<Nivel> losNiveles) {
+		this.losNiveles = losNiveles;
+	}
+	
+	public void agregarNivel(){
+		mundo.agregarNivel(nivelEnConstruccion);
+		List<Nivel> n = mundo.getNiveles();
+		this.setLosNiveles(null);
+		this.setLosNiveles(n);
+		nivelEnConstruccion = new Nivel();
 	}
 }

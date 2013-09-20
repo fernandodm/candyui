@@ -23,6 +23,7 @@ public class TableroWindow extends SimpleWindow<Tablero>{
 		this.setTaskDescription("Comenza a jugar");
 
 		super.createMainTemplate(mainPanel);
+	
 
 		this.createResultsGrid(mainPanel); // tablita
 		//this.createGridActions(mainPanel);
@@ -105,7 +106,7 @@ public class TableroWindow extends SimpleWindow<Tablero>{
 		remove.setCaption("Borrar");
 		remove.onClick(new MessageSend(this.getModelObject(), "eliminarCelularSeleccionado"));
 
-		// Deshabilitar los botones si no hay ningún elemento seleccionado en la grilla.
+		// Deshabilitar los botones si no hay ningï¿½n elemento seleccionado en la grilla.
 		NotNullObservable elementSelected = new NotNullObservable("celularSeleccionado");
 		remove.bindEnabled(elementSelected);
 		edit.bindEnabled(elementSelected);

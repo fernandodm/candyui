@@ -12,6 +12,8 @@ import org.uqbar.arena.widgets.Label;
 import org.uqbar.arena.widgets.Panel;
 import org.uqbar.arena.widgets.Selector;
 import org.uqbar.arena.widgets.TextBox;
+import org.uqbar.arena.widgets.tables.Column;
+import org.uqbar.arena.widgets.tables.Table;
 import org.uqbar.arena.windows.SimpleWindow;
 import org.uqbar.arena.windows.Window;
 import org.uqbar.arena.windows.WindowOwner; 
@@ -23,6 +25,8 @@ import org.uqbar.lacar.ui.model.bindings.Binding;
 import appModel.MundoAppModel;
 
 import Tp.CandyCrush.Dificultad;
+import Tp.CandyCrush.Nivel;
+import Tp.CandyCrush.Objetivo;
 
 @SuppressWarnings("serial")
 public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
@@ -30,6 +34,16 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 	public ConfiguracionWindow(WindowOwner parent) {
 		super(parent, new MundoAppModel());
 	
+	}
+	
+	
+	@Override
+	protected void createMainTemplate(Panel mainPanel) {
+		this.setTaskDescription("Crear Nivel");
+
+		super.createMainTemplate(mainPanel);
+
+		this.crearTablaNiveles(mainPanel);
 	}
 
 	@Override
@@ -40,9 +54,9 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 		Panel panel = new Panel(mainPanel);
 		 
 	    final Panel editorPanel = panel;
-		    
-	    editorPanel.setLayout(new ColumnLayout(2));
 	    
+	    editorPanel.setLayout(new ColumnLayout(3));
+	    	    
 	    new Label(editorPanel)
 	    	.setText("Nombre del mundo:");
 	    
@@ -64,6 +78,7 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 	    
 	    new Label(datosNivelPanel)
     		.setText("Nombre del nivel:");
+	    	
 	    
 	    new TextBox(datosNivelPanel)
 	    	.setWidth(150)
@@ -78,9 +93,7 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 		
 		selector.bindItemsToProperty("dificultades")
 			.setAdapter(new PropertyAdapter(Dificultad.class, "nombre"));
-			
-		
-	    ////////////////
+	
 	    
 		Panel tableroPanel = new Panel(mainPanel);
 		tableroPanel.setLayout(new ColumnLayout(5));
@@ -95,32 +108,77 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 	        .setText("Filas:");
 	    
 	    new TextBox(tableroPanel)
-	       .setWidth(50)
-	       .<ControlBuilder>bindValueToProperty("tablero.alto");
+	    	.setWidth(30)
+	        .<ControlBuilder>bindValueToProperty("tablero.alto");
 	    
 	    new Label(tableroPanel)
 	    	.setText("Columnas:");
     
 	    new TextBox(tableroPanel)
-	    	.setWidth(50)
+	    	.setWidth(30)
 	    	.<ControlBuilder>bindValueToProperty("tablero.ancho");
 	    
-	    /**
-	    Selector<Dificultad> selector = new Selector<Dificultad>(editorPanel) //
-				.allowNull(false);
-//		selector.bindValueToProperty("dificultad");
-			
-		selector.bindValueToProperty("dificultades")
-//			.setAdapter(new PropertyAdapter(Dificultad.class, "getNombre"))
-		;*/
+	    Panel objetivosPanel = new Panel(mainPanel);
+	    objetivosPanel.setLayout(new ColumnLayout(3));
+	    
+	    new Label(objetivosPanel)
+	    	.setText("Objetivos:")
+	    	.setHeigth(120);
+	    
+	    this.crearTablaObjetivos(objetivosPanel);
+	    
+	   // this.crearTablaNiveles(editorPanel);
+
 	}
 	
+	public void crearTablaObjetivos(Panel objetivosPanel){
+		
+		Table<Objetivo> table = new Table<Objetivo>(objetivosPanel, Objetivo.class);
+		table.setHeigth(100);
+		table.setWidth(200);
+		
+		//table.bindItemsToProperty("");
+		
+		Column<Objetivo> numNivel = new Column<Objetivo>(table); //
+		numNivel.setTitle("Objetivo")
+				.setFixedSize(100);
+		
+	}
+	
+	private void crearTablaNiveles(Panel editorPanel) {
+		Table<Nivel> table = new Table<Nivel>(editorPanel, Nivel.class);
+		table.setHeigth(100);
+		table.setWidth(200);
+		table.bindItemsToProperty("losNiveles");
+		
+		
+		
+		//Column<Nivel> numNivel = new Column<Nivel>(table); //
+		//numNivel.setTitle("Nivel")
+		//		.setFixedSize(50);
+			
+		
+		Column<Nivel> nombreNivel = new Column<Nivel>(table); //
+		nombreNivel.setTitle("Nombre")
+				   .setFixedSize(100)
+				   .bindContentsToProperty("nombre");
+		
+		int cantDeNiveles = this.getModelObject().getMundo().getNiveles().size();
+		
+		for(int i = 0; i < cantDeNiveles; i++){
+			nombreNivel.bindContentsToTransformer(new TransformerGetNivel());
+			
+			
+		}
+		
+	}
+
 	@Override
 	protected void addActions(Panel mainPanel) {
 		
-	//	new Button(mainPanel) //
-		//	.setCaption("Iniciar")
-		//	.onClick(new MessageSend(this, "iniciar")); 
+		new Button(mainPanel) //
+			.setCaption("Agregar nivel")
+			.onClick(new MessageSend(this.getModelObject(), "agregarNivel")); 
 		 
 	}
 	
