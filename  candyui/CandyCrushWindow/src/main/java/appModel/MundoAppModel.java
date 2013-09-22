@@ -1,53 +1,93 @@
 package appModel;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.uqbar.commons.utils.Observable;
 
 import Tp.CandyCrush.Dificultad;
+import Tp.CandyCrush.ExplosionesPorColor;
+import Tp.CandyCrush.GeneradorNroNivel;
+import Tp.CandyCrush.GrandesExplosiones;
 import Tp.CandyCrush.Mundo;
 import Tp.CandyCrush.Nivel;
+import Tp.CandyCrush.Objetivo;
 import Tp.CandyCrush.Tablero;
 
 @Observable
 public class MundoAppModel {
-	private Mundo mundo;
-	private Nivel nivelEnConstruccion;
+	private Mundo mundo = new Mundo();
+	private Nivel nivelEnConstruccion = new Nivel();
 	private List<Dificultad> dificultades = Dificultad.getDificultades();
-	private Tablero tablero;
-	private List<Nivel> losNiveles;
+	private Tablero tablero = new Tablero();
+	private List<Nivel> losNiveles = mundo.getNiveles();
+	private Nivel nivelSeleccionado;
+	private List<String> colores;
+	private Objetivo objetivo;
+	private ExplosionesPorColor explosionesPorColor = new ExplosionesPorColor();
+	private GrandesExplosiones grandesExplosiones = new GrandesExplosiones();
+	private List<Integer> selectorExplosiones = Arrays.asList(1,2,3,4);
+	private List<Objetivo> objetivos;
 	
 	public MundoAppModel(){
-		mundo = new Mundo();
-		Nivel n = new Nivel();
-		n.setNombre("Mundo de chocolate");
-		mundo.agregarNivel(n);
-		mundo.agregarNivel(n);
-		nivelEnConstruccion = new Nivel();
-		tablero = new Tablero();
+		
 		nivelEnConstruccion.setTablero(tablero);
 		tablero.setNivel(nivelEnConstruccion);
-		setLosNiveles(mundo.getNiveles());
 	}
 	
+	//*******************//
+	//Getters and Setters//
+	//*******************//
 	
+	public ExplosionesPorColor getExplosionesPorColor() {
+		return explosionesPorColor;
+	}
+
+	public List<Integer> getSelectorExplosiones() {
+		return selectorExplosiones;
+	}
+
+	public void setSelectorExplosiones(List<Integer> selectorExplosiones) {
+		this.selectorExplosiones = selectorExplosiones;
+	}
+
+	public GrandesExplosiones getGrandesExplosiones() {
+		return grandesExplosiones;
+	}
+
+	public void setGrandesExplosiones(GrandesExplosiones grandesExplosiones) {
+		this.grandesExplosiones = grandesExplosiones;
+	}
+
+	public void setExplosionesPorColor(ExplosionesPorColor explosionesPorColor) {
+		this.explosionesPorColor = explosionesPorColor;
+	}
+
+	public Objetivo getObjetivo() {
+		return objetivo;
+	}
+	public void setObjetivo(Objetivo objetivo) {
+		this.objetivo = objetivo;
+	}
+	public Nivel getNivelSeleccionado() {
+		return nivelSeleccionado;
+	}
+	public void setNivelSeleccionado(Nivel nivelSeleccionado) {
+		this.nivelSeleccionado = nivelSeleccionado;
+	}	
 	public Tablero getTablero() {
 		return tablero;
 	}
-
 	public void setTablero(Tablero tablero) {
 		this.tablero = tablero;
 	}
-
 	public List<Dificultad> getDificultades() {
 		return dificultades;
 	}
-
 	public void setDificultades(List<Dificultad> dificultades) {
 		this.dificultades = dificultades;
 	}
-
-	
 	public Mundo getMundo() {
 		return mundo;
 	}
@@ -60,22 +100,102 @@ public class MundoAppModel {
 	public void setNivelEnConstruccion(Nivel nivelEnConstruccion) {
 		this.nivelEnConstruccion = nivelEnConstruccion;
 	}
-
-
 	public List<Nivel> getLosNiveles() {
 		return losNiveles;
 	}
-
-
 	public void setLosNiveles(List<Nivel> losNiveles) {
 		this.losNiveles = losNiveles;
 	}
-	
-	public void agregarNivel(){
-		mundo.agregarNivel(nivelEnConstruccion);
-		List<Nivel> n = mundo.getNiveles();
-		this.setLosNiveles(null);
-		this.setLosNiveles(n);
-		nivelEnConstruccion = new Nivel();
+	public List<String> getColores() {
+		return colores;
 	}
+
+	public void setColores(List<String> colores) {
+		this.colores = colores;
+	}
+
+	public List<Objetivo> getObjetivos() {
+		return objetivos;
+	}
+
+	public void setObjetivos(List<Objetivo> objetivos) {
+		this.objetivos = objetivos;
+	}
+
+	//**************//
+	// ACCIONES	    //
+	//**************//
+	
+	/**
+	 * Elimina el nivel seleccionado
+	 */
+	public void eliminarNivelSeleccionado(){
+		
+		renumerarNiveles();
+		
+		mundo.eliminarNivel(nivelSeleccionado);
+				
+		List<Nivel> niv = mundo.getNiveles();
+		this.setLosNiveles(null);
+		this.setLosNiveles(niv);
+		
+	
+	}
+
+	/**
+	 * Una vez que se elimino un nivel se renumeran los niveles
+	 */
+	public void renumerarNiveles() {
+		
+		for(Nivel n : mundo.getNiveles()){
+			if(n.getNroNivel() > nivelSeleccionado.getNroNivel()){
+				n.setNroNivel(n.getNroNivel() - 1);
+			}
+		}
+		
+		GeneradorNroNivel.restarNroNivel();
+	}
+	
+	/**
+	 * Agrega el nivel en construccion al mundo
+	 */
+	public void agregarNivel(){
+		
+		mundo.agregarNivel(nivelEnConstruccion);
+		
+		List<Nivel> niv = mundo.getNiveles();
+		this.setLosNiveles(null);
+		this.setLosNiveles(niv);
+		nivelEnConstruccion = new Nivel();
+		
+	}
+
+	/**
+	 * Agrega un objetivo (grandes explosiones, explosiones por color)
+	 * al nivel en construccion
+	 */
+	public void agregarObjetivo(){
+				
+		nivelEnConstruccion.agregarObjetivo(objetivo);
+		
+		List<Objetivo> objetivos = nivelEnConstruccion.getObjetivos();
+
+		this.setObjetivos(null);
+		this.setObjetivos(objetivos);
+		explosionesPorColor = new ExplosionesPorColor();
+		grandesExplosiones = new GrandesExplosiones();
+		
+	}
+
+	public void realizarCambios(){
+
+		System.out.println(nivelSeleccionado.getNombre());
+		System.out.println("lalalalalallalallaalla");
+		List<Nivel> niv = mundo.getNiveles();
+		this.setLosNiveles(null);
+		this.setLosNiveles(niv);
+		nivelEnConstruccion = new Nivel();
+		
+	}
+
 }

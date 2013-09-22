@@ -4,25 +4,20 @@ import java.awt.Color;
 
 import org.uqbar.arena.actions.MessageSend;
 import org.uqbar.arena.bindings.NotNullObservable;
-import org.uqbar.arena.bindings.ObservableProperty;
 import org.uqbar.arena.bindings.PropertyAdapter;
 import org.uqbar.arena.layout.ColumnLayout;
-import org.uqbar.arena.layout.VerticalLayout;
 import org.uqbar.arena.widgets.Button;
-import org.uqbar.arena.widgets.Control;
 import org.uqbar.arena.widgets.Label;
 import org.uqbar.arena.widgets.Panel;
 import org.uqbar.arena.widgets.Selector;
 import org.uqbar.arena.widgets.TextBox;
 import org.uqbar.arena.widgets.tables.Column;
 import org.uqbar.arena.widgets.tables.Table;
+import org.uqbar.arena.windows.Dialog;
 import org.uqbar.arena.windows.SimpleWindow;
-import org.uqbar.arena.windows.Window;
 import org.uqbar.arena.windows.WindowOwner; 
 
 import org.uqbar.lacar.ui.model.ControlBuilder;
-import org.uqbar.lacar.ui.model.ListBuilder;
-import org.uqbar.lacar.ui.model.bindings.Binding;
 
 import appModel.MundoAppModel;
 
@@ -38,36 +33,8 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 	
 	}
 	
-	
-	/**@Override
-	protected void createMainTemplate(Panel mainPanel) {
-		this.setTaskDescription("Crear Nivel");
-
-		
-		super.createMainTemplate(mainPanel);
-
-		this.crearTablaNiveles(mainPanel);
-		this.botonesParaEditarNivel(mainPanel);
-	}*/
-
-	public void botonesParaEditarNivel(Panel mainPanel){
-		
-		Panel panel = new Panel(mainPanel);
-		
-		new Button(panel) //
-			.setCaption("Editar");
-			//.onClick(new MessageSend(this.getModelObject(), "agregarNivel")); 
-		
-		new Button(panel) //
-			.setCaption("Borrar")
-			.setWidth(13);
-			
-		
-	}
-	
 	@Override
 	protected void createFormPanel(Panel mainPanel) {
-		this.setTaskDescription("holaaaaaaaaaaa");
 		
 		this.setTitle("Configurar juego");
 		
@@ -84,7 +51,23 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 	    	.setWidth(150)
 	    	.bindValueToProperty("mundo.nombre");
 	    
-	    //Panel para crear el nivel
+	    this.datosParaEditarNivel(mainPanel);
+	    
+	    Panel tablaNiveles = new Panel(mainPanel);
+	    tablaNiveles.setLayout(new ColumnLayout(3));
+	    
+	    new Label(tablaNiveles)
+    		.setText("Niveles creados:")
+    		.setHeigth(100);
+	    
+	    this.crearTablaNiveles(tablaNiveles);
+	    
+	    this.botonesParaEditarNivel(tablaNiveles);
+
+	}
+	
+	public void datosParaEditarNivel(Panel mainPanel){
+				
 	    Panel nivelPanel = new Panel(mainPanel);
 	    
 	    new Label(nivelPanel)
@@ -92,14 +75,16 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 	    	.setForeground(Color.BLUE)
 	    	.setFontSize(12);
 	    
-	    //Ingresar la configuacion del nivel
+	    /////////////////////////////////////////////
+	    //Ingresar la configuacion del nuevo nivel
+	    ////////////////////////////////////////////
+	    
 	    Panel datosNivelPanel = new Panel(mainPanel);
 	    datosNivelPanel.setLayout(new ColumnLayout(2));
 	    
 	    new Label(datosNivelPanel)
     		.setText("Nombre del nivel:");
-	    	
-	    
+	    		    
 	    new TextBox(datosNivelPanel)
 	    	.setWidth(150)
     		.bindValueToProperty("nivelEnConstruccion.nombre");
@@ -109,12 +94,11 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 	    
 	    Selector<Dificultad> selector = new Selector<Dificultad>(datosNivelPanel) //
 				.allowNull(false);
-		selector.bindValueToProperty("nivelEnConstruccion.dificultad");
+		selector.<ControlBuilder>bindValueToProperty("nivelEnConstruccion.dificultad");
 		
 		selector.bindItemsToProperty("dificultades")
 			.setAdapter(new PropertyAdapter(Dificultad.class, "nombre"));
-	
-	    
+			    
 		Panel tableroPanel = new Panel(mainPanel);
 		tableroPanel.setLayout(new ColumnLayout(5));
 		
@@ -145,6 +129,16 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 	    	.setWidth(30)
     		.<ControlBuilder>bindValueToProperty("nivelEnConstruccion.cantidadMovimientos");
 	    
+	    Panel puntos = new Panel(mainPanel);
+	    puntos.setLayout(new ColumnLayout(2));
+	    
+	    new Label(puntos)
+			.setText("Cantidad de Puntos:");
+    
+	    new TextBox(puntos)
+	    	.setWidth(80)
+			.<ControlBuilder>bindValueToProperty("nivelEnConstruccion.puntajeMinimo");
+	    
 	    Panel objetivosPanel = new Panel(mainPanel);
 	    objetivosPanel.setLayout(new ColumnLayout(3));
 	    
@@ -155,21 +149,25 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 	    this.crearTablaObjetivos(objetivosPanel);
 	    
 	    this.botonesParaEditarObjetivos(objetivosPanel);
-	    
-	    Panel tablaNiveles = new Panel(mainPanel);
-	    tablaNiveles.setLayout(new ColumnLayout(3));
-	    
-	    new Label(tablaNiveles)
-    		.setText("Niveles creados:")
-    		.setHeigth(100);
-	    
-	    this.crearTablaNiveles(tablaNiveles);
-	    
-	    this.botonesParaEditarNivel(tablaNiveles);
-
+	}
+		
+	public void botonesParaEditarNivel(Panel mainPanel){
+		
+		Panel panel = new Panel(mainPanel);
+		
+		new Button(panel) //
+			.setCaption("Editar")
+			.onClick(new MessageSend(this, "editarNivel")); 
+		
+		new Button(panel) //
+			.setCaption("Borrar")
+			.onClick(new MessageSend(this.getModelObject(), "eliminarNivelSeleccionado"))
+			.setWidth(13);	
 	}
 	
 	private void botonesParaEditarObjetivos(Panel objetivosPanel) {
+		
+		NotNullObservable notNullObservable = new NotNullObservable("nivelEnConstruccion.dificultad");
 		
 		Panel panel = new Panel(objetivosPanel);
 		
@@ -179,31 +177,46 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 	
 		new Button(panel) //
 			.setCaption("Borrar");
+			//.onClick(new MessageSend(this.getModelObject(), "eliminarObjetivo")); 
 		
 		new Button(panel) //
-		.setCaption("Agregar");
+			.setCaption("Agregar")
+			.onClick(new MessageSend(this, "agregarObjetivo"))
+			.bindEnabled(notNullObservable);
 	}
 
-
+	
+	/**
+	 * crea la tabla para ver los objetivos
+	 * @param objetivosPanel
+	 */
 	public void crearTablaObjetivos(Panel objetivosPanel){
 		
 		Table<Objetivo> table = new Table<Objetivo>(objetivosPanel, Objetivo.class);
 		table.setHeigth(80);
 		table.setWidth(200);
 		
-		//table.bindItemsToProperty("");
+		table.bindItemsToProperty("objetivos");
 		
-		Column<Objetivo> numNivel = new Column<Objetivo>(table); //
-		numNivel.setTitle("Objetivo")
+		Column<Objetivo> nomObjetivo = new Column<Objetivo>(table); //
+		nomObjetivo.setTitle("Objetivo")
 				.setFixedSize(200);
 		
-	}
+		nomObjetivo.bindContentsToTransformer(new TransformerGetObjetivo(this.getModelObject()));
+		
+	} 
 	
+	/**
+	 * crea la tabla en donde se ven los niveles
+	 * @param editorPanel
+	 */
 	private void crearTablaNiveles(Panel editorPanel) {
+		
 		Table<Nivel> table = new Table<Nivel>(editorPanel, Nivel.class);
 		table.setHeigth(80);
 		table.setWidth(190);
 		table.bindItemsToProperty("losNiveles");
+		table.bindValueToProperty("nivelSeleccionado");
 		
 		
 		
@@ -217,26 +230,16 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 		nombreNivel.setTitle("Nombre")
 				   .setFixedSize(155)
 				   .bindContentsToProperty("nombre");
-		
-		int cantDeNiveles = this.getModelObject().getMundo().getNiveles().size();
-		
-		for(int i = 0; i < cantDeNiveles; i++){
-			nombreNivel.bindContentsToTransformer(new TransformerGetNivel());
-			
-			
-		}
+	
+		nombreNivel.bindContentsToTransformer(new TransformerGetNivel());
+
 				
 	}
-
+	
 	@Override
 	protected void addActions(Panel mainPanel) {
 		NotNullObservable notNullObservable1 = new NotNullObservable("nivelEnConstruccion.nombre");
-		NotNullObservable notNullObservable2 = new NotNullObservable("tablero.alto");
-		NotNullObservable notNullObservable3 = new NotNullObservable("tablero.ancho");
-		NotNullObservable notNullObservable4 = new NotNullObservable("nivelEnConstruccion.dificultad");
-		NotNullObservable notNullObservable5 = new NotNullObservable("mundo.nombre");
-		NotNullObservable notNullObservable6 = new NotNullObservable("nivelEnConstruccion.cantidadMovimientos");
-		
+				
 		Button boton = new Button(mainPanel); 
 		
 		boton.disableOnError();
@@ -245,15 +248,22 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 		boton.setBackground(Color.BLACK);
 		
 		//////////////////
-		////BLOQUEOS//////
-		boton.bindEnabled(notNullObservable6);
-		boton.bindEnabled(notNullObservable5);
-		boton.bindEnabled(notNullObservable4);
-		boton.bindEnabled(notNullObservable2);
-		boton.bindEnabled(notNullObservable3);
+		////BLOQUEO//////
+		/////////////////
 		boton.bindEnabled(notNullObservable1);
-	    
-		 
+	    		 
 	}
 
+	public void agregarObjetivo(){
+		this.openDialog(new AgregarObjetivoWindow(this, this.getModelObject()));
+	}
+	
+	public void editarNivel(){
+		this.openDialog(new EditarNivelWindow(this, this.getModelObject()));
+	}
+	
+	protected void openDialog(Dialog<?> dialog) {
+		//dialog.onAccept(new MessageSend(this.getModelObject(), "editarNivel"));
+		dialog.open();
+	}
 }
