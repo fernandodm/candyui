@@ -1,6 +1,5 @@
 package appModel;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +28,17 @@ public class MundoAppModel {
 	private GrandesExplosiones grandesExplosiones = new GrandesExplosiones();
 	private List<Integer> selectorExplosiones = Arrays.asList(1,2,3,4);
 	private List<Objetivo> objetivos;
+	private Objetivo objetivoSeleccionado;
+	private boolean puedeAgregar;
 	
+	public boolean isPuedeAgregar() {
+		return puedeAgregar;
+	}
+
+	public void setPuedeAgregar(boolean puedeAgregar) {
+		this.puedeAgregar = puedeAgregar;
+	}
+
 	public MundoAppModel(){
 		
 		nivelEnConstruccion.setTablero(tablero);
@@ -43,27 +52,21 @@ public class MundoAppModel {
 	public ExplosionesPorColor getExplosionesPorColor() {
 		return explosionesPorColor;
 	}
-
 	public List<Integer> getSelectorExplosiones() {
 		return selectorExplosiones;
 	}
-
 	public void setSelectorExplosiones(List<Integer> selectorExplosiones) {
 		this.selectorExplosiones = selectorExplosiones;
 	}
-
 	public GrandesExplosiones getGrandesExplosiones() {
 		return grandesExplosiones;
 	}
-
 	public void setGrandesExplosiones(GrandesExplosiones grandesExplosiones) {
 		this.grandesExplosiones = grandesExplosiones;
 	}
-
 	public void setExplosionesPorColor(ExplosionesPorColor explosionesPorColor) {
 		this.explosionesPorColor = explosionesPorColor;
 	}
-
 	public Objetivo getObjetivo() {
 		return objetivo;
 	}
@@ -109,37 +112,49 @@ public class MundoAppModel {
 	public List<String> getColores() {
 		return colores;
 	}
-
 	public void setColores(List<String> colores) {
 		this.colores = colores;
 	}
-
 	public List<Objetivo> getObjetivos() {
 		return objetivos;
 	}
-
 	public void setObjetivos(List<Objetivo> objetivos) {
 		this.objetivos = objetivos;
 	}
-
+	public Objetivo getObjetivoSeleccionado() {
+		return objetivoSeleccionado;
+	}
+	public void setObjetivoSeleccionado(Objetivo objetivoSeleccionado) {
+		this.objetivoSeleccionado = objetivoSeleccionado;
+	}
+	
 	//**************//
 	// ACCIONES	    //
 	//**************//
+	
+	/**public boolean puedeAgregarNivel(){
+		
+		return tablero.getAlto() != 0 && tablero.getAncho() != 0
+				&& nivelEnConstruccion.getNombre() != null &&
+				nivelEnConstruccion.getCantidadMovimientos() != 0
+				&& nivelEnConstruccion.getDificultad() != null &&
+				(nivelEnConstruccion.getPuntajeMinimo() != 0 || 
+				!nivelEnConstruccion.getObjetivos().isEmpty());
+	}*/
 	
 	/**
 	 * Elimina el nivel seleccionado
 	 */
 	public void eliminarNivelSeleccionado(){
+				
+		mundo.eliminarNivel(nivelSeleccionado);
 		
 		renumerarNiveles();
-		
-		mundo.eliminarNivel(nivelSeleccionado);
 				
 		List<Nivel> niv = mundo.getNiveles();
 		this.setLosNiveles(null);
 		this.setLosNiveles(niv);
-		
-	
+			
 	}
 
 	/**
@@ -152,8 +167,14 @@ public class MundoAppModel {
 				n.setNroNivel(n.getNroNivel() - 1);
 			}
 		}
-		
+		renumerarNivelEnConstruccion();
 		GeneradorNroNivel.restarNroNivel();
+	}
+
+	public void renumerarNivelEnConstruccion() {
+		if(nivelEnConstruccion.getNroNivel() > nivelSeleccionado.getNroNivel()){
+			nivelEnConstruccion.setNroNivel(nivelEnConstruccion.getNroNivel() - 1);
+		}
 	}
 	
 	/**
@@ -187,14 +208,23 @@ public class MundoAppModel {
 		
 	}
 
+	public void eliminarObjetivo(){
+				
+		nivelEnConstruccion.eliminarObjetivo(objetivoSeleccionado);
+				
+		List<Objetivo> objs = nivelEnConstruccion.getObjetivos();
+		this.setObjetivos(null);
+		this.setObjetivos(objs);
+			
+		
+	}
+	
 	public void realizarCambios(){
 
-		System.out.println(nivelSeleccionado.getNombre());
-		System.out.println("lalalalalallalallaalla");
 		List<Nivel> niv = mundo.getNiveles();
 		this.setLosNiveles(null);
 		this.setLosNiveles(niv);
-		nivelEnConstruccion = new Nivel();
+		nivelSeleccionado = null;
 		
 	}
 

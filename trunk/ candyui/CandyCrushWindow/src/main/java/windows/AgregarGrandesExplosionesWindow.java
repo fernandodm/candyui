@@ -25,7 +25,7 @@ public class AgregarGrandesExplosionesWindow  extends TransactionalDialog<MundoA
 
 	@Override
 	protected void createFormPanel(Panel mainPanel) {
-this.setTitle("Objetivo: Grandes Explosiones");
+		this.setTitle("Objetivo: Grandes Explosiones");
 		
 		Panel panel = new Panel(mainPanel);
 		panel.setLayout(new ColumnLayout(2));
@@ -49,10 +49,7 @@ this.setTitle("Objetivo: Grandes Explosiones");
 				.allowNull(false);
 		selectorCantidad.bindValueToProperty("grandesExplosiones.cantidadGrandesExplosiones");
 		selectorCantidad.bindItemsToProperty("selectorExplosiones");
-		
-	
-	
-		
+
 	}
 	
 	@Override
