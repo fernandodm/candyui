@@ -8,18 +8,19 @@ import org.uqbar.arena.windows.SimpleWindow;
 import org.uqbar.arena.windows.WindowOwner;
 
 import Tp.CandyCrush.Caramelo;
+import Tp.CandyCrush.Partida;
 import Tp.CandyCrush.Tablero;
 
-public class TableroWindow extends SimpleWindow<Tablero>{
+public class TableroWindow extends SimpleWindow<Partida>{
 
-	public TableroWindow(WindowOwner owner,Tablero tablero) {
-		super(owner, tablero);
+	public TableroWindow(WindowOwner owner,Partida part) {
+		super(owner, part);
 		
 	}
 
 	@Override
 	public void createMainTemplate(Panel mainPanel){
-		this.setTitle("Tablero CandyCrush");
+		this.setTitle("CandyCrush");
 		this.setTaskDescription("Comenza a jugar");
 
 		super.createMainTemplate(mainPanel);
@@ -49,19 +50,20 @@ public class TableroWindow extends SimpleWindow<Tablero>{
 	}
 	
 	protected void createResultsGrid(Panel mainPanel) {
+	
 		Table<Caramelo[]> table = new Table<Caramelo[]>(mainPanel, Caramelo[].class);
 		table.setHeigth(200);
 		table.setWidth(450);
-
+	
 		table.bindItemsToProperty("caramelos");
-		//table.bindValueToProperty("celularSeleccionado");
+		
 
 		this.describeResultsGrid(table);
 	}
 	
 	protected void describeResultsGrid(Table<Caramelo[]> table) {
-		
-		int ancho = this.getModelObject().getAncho();
+	
+		int ancho = this.getModelObject().getNivelActual().getTablero().getAncho();
 		
 		for(int i = 0; i < ancho; i++){
 				
