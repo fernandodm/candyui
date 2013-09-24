@@ -14,18 +14,20 @@ import org.uqbar.arena.widgets.tables.Column;
 import org.uqbar.arena.widgets.tables.Table;
 import org.uqbar.arena.windows.Dialog;
 import org.uqbar.arena.windows.SimpleWindow;
+import org.uqbar.arena.windows.Window;
 import org.uqbar.arena.windows.WindowOwner; 
 import org.uqbar.lacar.ui.model.ControlBuilder;
 import appModel.MundoAppModel;
 import Tp.CandyCrush.Dificultad;
 import Tp.CandyCrush.Nivel;
 import Tp.CandyCrush.Objetivo;
+import Tp.CandyCrush.Partida;
 
 @SuppressWarnings("serial")
 public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 
-	public ConfiguracionWindow(WindowOwner parent, MundoAppModel model) {
-		super(parent, model);
+	public ConfiguracionWindow(WindowOwner parent) {
+		super(parent, new MundoAppModel());
 		
 		this.setTitle("Configurar juego");
 		this.setTaskDescription("Agregue niveles");
@@ -192,11 +194,6 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 		NotNullObservable notNullObservable2 = new NotNullObservable("objetivoSeleccionado");
 		
 		Panel panel = new Panel(objetivosPanel);
-		
-		new Button(panel) //
-			.setCaption("Editar")
-			.onClick(new MessageSend(this.getModelObject(), "editarObjetivo"))
-			.bindEnabled(notNullObservable2); 
 	
 		new Button(panel) //
 			.setCaption("Borrar")
@@ -251,22 +248,29 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 		
 		//Bloquear boton
 		boton.bindEnabled(notNullObservable1);
+		
+		new Button(mainPanel)
+			.setCaption("Jugar")
+			.onClick(new MessageSend(this, "comenzar"));
 	    		 
+	}
+	
+	public void comenzar(){
+		Partida partida = new Partida(this.getModelObject().getMundo());
+
+		this.openWindow(new TableroWindow(this, partida));
+		
 	}
 
 	public void agregarObjetivo(){
-		this.openDialog(new AgregarObjetivoWindow(this, this.getModelObject()));
+		this.openWindow(new AgregarObjetivoWindow(this, this.getModelObject()));
 	}
 	
 	public void editarNivel(){
-		this.openDialog(new EditarNivelWindow(this, this.getModelObject()));
+		this.openWindow(new EditarNivelWindow(this, this.getModelObject()));
 	}
-	
-	public void editarObjetivo(){
-		this.openDialog(new EditarObjetivoWindow(this, this.getModelObject().getObjetivoSeleccionado()));
-	}
-	
-	protected void openDialog(Dialog<?> dialog) {
-		dialog.open();
+		
+	protected void openWindow(Window<?> window) {
+		window.open();
 	}
 }
