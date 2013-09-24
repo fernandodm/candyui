@@ -3,6 +3,7 @@ package appModel;
 import java.util.Arrays;
 import java.util.List;
 
+import org.uqbar.commons.model.UserException;
 import org.uqbar.commons.utils.Observable;
 
 import Tp.CandyCrush.Dificultad;
@@ -29,15 +30,7 @@ public class MundoAppModel {
 	private List<Integer> selectorExplosiones = Arrays.asList(1,2,3,4);
 	private List<Objetivo> objetivos;
 	private Objetivo objetivoSeleccionado;
-	private boolean puedeAgregar;
 	
-	public boolean isPuedeAgregar() {
-		return puedeAgregar;
-	}
-
-	public void setPuedeAgregar(boolean puedeAgregar) {
-		this.puedeAgregar = puedeAgregar;
-	}
 
 	public MundoAppModel(){
 		
@@ -132,15 +125,12 @@ public class MundoAppModel {
 	// ACCIONES	    //
 	//**************//
 	
-	/**public boolean puedeAgregarNivel(){
+	public boolean puedeAgregarNivel(){
 		
-		return tablero.getAlto() != 0 && tablero.getAncho() != 0
-				&& nivelEnConstruccion.getNombre() != null &&
-				nivelEnConstruccion.getCantidadMovimientos() != 0
-				&& nivelEnConstruccion.getDificultad() != null &&
-				(nivelEnConstruccion.getPuntajeMinimo() != 0 || 
-				!nivelEnConstruccion.getObjetivos().isEmpty());
-	}*/
+		return nivelEnConstruccion.getTablero().getTabPuedeAgregar()
+				&& nivelEnConstruccion.getNivPuedeAgregar();
+		
+	}
 	
 	/**
 	 * Elimina el nivel seleccionado
@@ -176,6 +166,7 @@ public class MundoAppModel {
 			nivelEnConstruccion.setNroNivel(nivelEnConstruccion.getNroNivel() - 1);
 		}
 	}
+
 	
 	/**
 	 * Agrega el nivel en construccion al mundo
@@ -188,6 +179,9 @@ public class MundoAppModel {
 		this.setLosNiveles(null);
 		this.setLosNiveles(niv);
 		nivelEnConstruccion = new Nivel();
+		tablero = new Tablero();
+		nivelEnConstruccion.setTablero(tablero);
+		tablero.setNivel(nivelEnConstruccion);
 		
 	}
 
