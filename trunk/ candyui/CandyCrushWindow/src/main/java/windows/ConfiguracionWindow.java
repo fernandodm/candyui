@@ -12,7 +12,6 @@ import org.uqbar.arena.widgets.Selector;
 import org.uqbar.arena.widgets.TextBox;
 import org.uqbar.arena.widgets.tables.Column;
 import org.uqbar.arena.widgets.tables.Table;
-import org.uqbar.arena.windows.Dialog;
 import org.uqbar.arena.windows.SimpleWindow;
 import org.uqbar.arena.windows.Window;
 import org.uqbar.arena.windows.WindowOwner; 
@@ -23,7 +22,7 @@ import Tp.CandyCrush.Nivel;
 import Tp.CandyCrush.Objetivo;
 import Tp.CandyCrush.Partida;
 
-@SuppressWarnings("serial")
+@SuppressWarnings("all")
 public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 
 	public ConfiguracionWindow(WindowOwner parent) {
@@ -112,14 +111,14 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 	    
 	    new TextBox(tableroPanel)
 	    	.setWidth(30)
-	        .bindValueToProperty("tablero.alto");
+	        .<ControlBuilder>bindValueToProperty("tablero.alto");
 	    
 	    new Label(tableroPanel)
 	    	.setText("Columnas:");
     
 	    new TextBox(tableroPanel)
 	    	.setWidth(30)
-	    	.bindValueToProperty("tablero.ancho");
+	    	.<ControlBuilder>bindValueToProperty("tablero.ancho");
 	    
 	    new Label(tableroPanel)
         	.setText("Cantidad de movimientos:");
@@ -136,7 +135,7 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
     
 	    new TextBox(puntos)
 	    	.setWidth(80)
-			.bindValueToProperty("nivelEnConstruccion.puntajeMinimo");
+			.<ControlBuilder>bindValueToProperty("nivelEnConstruccion.puntajeMinimo");
 	    
 	    Panel objetivosPanel = new Panel(mainPanel);
 	    objetivosPanel.setLayout(new ColumnLayout(3));
@@ -237,7 +236,7 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 	
 	@Override
 	protected void addActions(Panel mainPanel) {
-		NotNullObservable notNullObservable1 = new NotNullObservable("nivelEnConstruccion.nombre");
+		//NotNullObservable notNullObservable1 = new NotNullObservable("nivelEnConstruccion.nombre");
 				
 		Button boton = new Button(mainPanel); 
 		
@@ -247,7 +246,8 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 		boton.setBackground(Color.BLACK);
 		
 		//Bloquear boton
-		boton.bindEnabled(notNullObservable1);
+		
+		boton.bindEnabledToProperty("nivelEnConstruccion.nivPuedeAgregar");
 		
 		new Button(mainPanel)
 			.setCaption("Jugar")
