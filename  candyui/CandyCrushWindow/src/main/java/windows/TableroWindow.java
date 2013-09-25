@@ -1,45 +1,74 @@
 package windows;
 
 
+import java.awt.Color;
+
+import org.uqbar.arena.actions.MessageSend;
+import org.uqbar.arena.bindings.PropertyAdapter;
+import org.uqbar.arena.layout.ColumnLayout;
+import org.uqbar.arena.widgets.Button;
+import org.uqbar.arena.widgets.Label;
 import org.uqbar.arena.widgets.Panel;
+import org.uqbar.arena.widgets.Selector;
+import org.uqbar.arena.widgets.TextBox;
 import org.uqbar.arena.widgets.tables.Column;
 import org.uqbar.arena.widgets.tables.Table;
 import org.uqbar.arena.windows.SimpleWindow;
 import org.uqbar.arena.windows.WindowOwner;
+import org.uqbar.lacar.ui.model.ControlBuilder;
 
+import appModel.PartidaAppModel;
 import Tp.CandyCrush.Caramelo;
+import Tp.CandyCrush.Dificultad;
+import Tp.CandyCrush.Movimiento;
 import Tp.CandyCrush.Partida;
 import Tp.CandyCrush.Tablero;
 
-public class TableroWindow extends SimpleWindow<Partida>{
+public class TableroWindow extends SimpleWindow<PartidaAppModel>{
 
-	public TableroWindow(WindowOwner owner,Partida part) {
-		super(owner, part);
+	public TableroWindow(WindowOwner parent) {
+		super(parent, new PartidaAppModel());
 		
 	}
 
 	@Override
 	public void createMainTemplate(Panel mainPanel){
-		this.setTitle("CandyCrush");
-		this.setTaskDescription("Comenza a jugar");
+		
 
-		super.createMainTemplate(mainPanel);
-	
-
-		this.createResultsGrid(mainPanel); // tablita
+		 // tablita
 		//this.createGridActions(mainPanel);
 	}
 	
 	@Override
 	protected void createFormPanel(Panel mainPanel) {
-		//Panel searchFormPanel = new Panel(mainPanel);
-		//searchFormPanel.setLayout(new ColumnLayout(2));
+		
+		this.setTitle("CandyCrush");
+		this.setTaskDescription("Comenza a jugar");
+		
+		super.createMainTemplate(mainPanel);
+		this.createResultsGrid(mainPanel);
+		
+		Panel searchFormPanel = new Panel(mainPanel);
+		searchFormPanel.setLayout(new ColumnLayout(2));
 
-		//new Label(searchFormPanel).setText("Fila").setForeground(Color.BLUE);
-		//new TextBox(searchFormPanel).bindValueToProperty("alto");
-
-		//new Label(searchFormPanel).setText("Columna").setForeground(Color.BLUE);
-		//new TextBox(searchFormPanel).bindValueToProperty("ancho");
+		new Label(searchFormPanel).setText("Fila").setForeground(Color.BLUE);
+		new TextBox(searchFormPanel).bindValueToProperty("coordenadaActual.y");
+		
+		new Label(searchFormPanel).setText("Columna").setForeground(Color.BLUE);
+		new TextBox(searchFormPanel).bindValueToProperty("coordenadaActual.x");
+		
+		Panel movePanel = new Panel(mainPanel);
+		movePanel.setLayout(new ColumnLayout(2));
+		
+		Selector<Movimiento> selector = new Selector<Movimiento>(movePanel) 
+				.allowNull(false);
+		selector.<ControlBuilder>bindValueToProperty("movimientoARealizar");
+		selector.bindItemsToProperty("movimientos")
+			.setAdapter(new PropertyAdapter(Movimiento.class, "nombre"));
+		
+		new Button(movePanel)
+		.setCaption("Realizar")
+		.onClick(new MessageSend(this.getModelObject().getPartida().getNivelActual().getTablero(), "moverCaramelo(coordenadaActual.y,coordenadaActual.x,movimientoARealizar)")); 
 		
 	}
 	
@@ -63,7 +92,7 @@ public class TableroWindow extends SimpleWindow<Partida>{
 	
 	protected void describeResultsGrid(Table<Caramelo[]> table) {
 	
-		int ancho = this.getModelObject().getNivelActual().getTablero().getAncho();
+		int ancho = this.getModelObject().getPartida().getNivelActual().getTablero().getAncho();
 		
 		for(int i = 0; i < ancho; i++){
 				
