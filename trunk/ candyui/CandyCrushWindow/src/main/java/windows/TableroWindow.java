@@ -30,22 +30,13 @@ public class TableroWindow extends SimpleWindow<PartidaAppModel>{
 		super(parent, new PartidaAppModel());
 		
 	}
-
-	@Override
-	public void createMainTemplate(Panel mainPanel){
-		
-
-		 // tablita
-		//this.createGridActions(mainPanel);
-	}
 	
 	@Override
 	protected void createFormPanel(Panel mainPanel) {
 		
 		this.setTitle("CandyCrush");
 		this.setTaskDescription("Comenza a jugar");
-		
-		super.createMainTemplate(mainPanel);
+	
 		this.createResultsGrid(mainPanel);
 		
 		Panel searchFormPanel = new Panel(mainPanel);

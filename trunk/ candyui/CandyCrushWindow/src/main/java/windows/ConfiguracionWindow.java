@@ -10,12 +10,17 @@ import org.uqbar.arena.widgets.Label;
 import org.uqbar.arena.widgets.Panel;
 import org.uqbar.arena.widgets.Selector;
 import org.uqbar.arena.widgets.TextBox;
+import org.uqbar.arena.widgets.TextFilter;
+import org.uqbar.arena.widgets.TextInputEvent;
 import org.uqbar.arena.widgets.tables.Column;
 import org.uqbar.arena.widgets.tables.Table;
 import org.uqbar.arena.windows.SimpleWindow;
 import org.uqbar.arena.windows.Window;
 import org.uqbar.arena.windows.WindowOwner; 
 import org.uqbar.lacar.ui.model.ControlBuilder;
+
+import com.uqbar.commons.StringUtils;
+
 import appModel.MundoAppModel;
 import Tp.CandyCrush.Dificultad;
 import Tp.CandyCrush.Nivel;
@@ -108,24 +113,27 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 		
 	    new Label(tableroPanel)
 	        .setText("Filas:");
-	    
+	 
 	    new TextBox(tableroPanel)
+	    	.withFilter(new StringTextFilter())
 	    	.setWidth(30)
-	        .<ControlBuilder>bindValueToProperty("tablero.alto");
+	        .bindValueToProperty("tablero.alto");
 	    
 	    new Label(tableroPanel)
 	    	.setText("Columnas:");
     
 	    new TextBox(tableroPanel)
+	    	.withFilter(new StringTextFilter())
 	    	.setWidth(30)
-	    	.<ControlBuilder>bindValueToProperty("tablero.ancho");
+	    	.bindValueToProperty("tablero.ancho");
 	    
 	    new Label(tableroPanel)
         	.setText("Cantidad de movimientos:");
     
 	    new TextBox(tableroPanel)
+	    	.withFilter(new StringTextFilter())
 	    	.setWidth(30)
-    		.<ControlBuilder>bindValueToProperty("nivelEnConstruccion.cantidadMovimientos");
+    		.bindValueToProperty("nivelEnConstruccion.cantidadMovimientos");
 	    
 	    Panel puntos = new Panel(mainPanel);
 	    puntos.setLayout(new ColumnLayout(2));
@@ -134,8 +142,9 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 			.setText("Cantidad de Puntos:");
     
 	    new TextBox(puntos)
+	    	.withFilter(new StringTextFilter())
 	    	.setWidth(80)
-			.<ControlBuilder>bindValueToProperty("nivelEnConstruccion.puntajeMinimo");
+			.bindValueToProperty("nivelEnConstruccion.puntajeMinimo");
 	    
 	    Panel objetivosPanel = new Panel(mainPanel);
 	    objetivosPanel.setLayout(new ColumnLayout(3));
@@ -256,9 +265,9 @@ public class ConfiguracionWindow extends SimpleWindow<MundoAppModel>{
 	}
 	
 	public void comenzar(){
-		Partida partida = new Partida(this.getModelObject().getMundo());
+		//Partida partida = new Partida(this.getModelObject().getMundo());
 
-		this.openWindow(new TableroWindow(this, partida));
+		//this.openWindow(new TableroWindow(this, partida));
 		
 	}
 
