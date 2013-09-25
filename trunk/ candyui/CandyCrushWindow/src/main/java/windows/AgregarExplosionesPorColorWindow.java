@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.uqbar.arena.actions.MessageSend;
 import org.uqbar.arena.aop.windows.TransactionalDialog;
-import org.uqbar.arena.bindings.PropertyAdapter;
 import org.uqbar.arena.layout.ColumnLayout;
 import org.uqbar.arena.widgets.Button;
 import org.uqbar.arena.widgets.Label;
@@ -14,7 +13,6 @@ import org.uqbar.arena.widgets.TextBox;
 import org.uqbar.arena.windows.WindowOwner;
 import org.uqbar.lacar.ui.model.ControlBuilder;
 
-import Tp.CandyCrush.ExplosionesPorColor;
 import appModel.MundoAppModel;
 
 public class AgregarExplosionesPorColorWindow extends TransactionalDialog<MundoAppModel>{
@@ -26,6 +24,7 @@ public class AgregarExplosionesPorColorWindow extends TransactionalDialog<MundoA
 
 	}
 
+	
 	@Override
 	protected void createFormPanel(Panel mainPanel) {
 
@@ -34,14 +33,14 @@ public class AgregarExplosionesPorColorWindow extends TransactionalDialog<MundoA
 		Panel panel = new Panel(mainPanel);
 		panel.setLayout(new ColumnLayout(2));
 		
-		List<String> colores = this.getModelObject().getNivelEnConstruccion().getDificultad().getColores();
+		List<String> colores = this.getModelObject().getDificultad().getColores();
 		
 		this.getModelObject().setColores(colores);
 		
 		new Label(panel)
 			.setText("Color:");
 		
-		Selector<String> selector = new Selector<String>(panel) //
+		Selector<String> selector = new Selector<String>(panel) 
 				.allowNull(false);
 		selector.bindValueToProperty("explosionesPorColor.color");
 		
@@ -51,6 +50,7 @@ public class AgregarExplosionesPorColorWindow extends TransactionalDialog<MundoA
 			.setText("Cantidad:");
 		
 		new TextBox(panel)
+			.withFilter(new StringTextFilter())
 			.setWidth(50)
 			.<ControlBuilder>bindValueToProperty("explosionesPorColor.cantidad");
 	
@@ -63,7 +63,8 @@ public class AgregarExplosionesPorColorWindow extends TransactionalDialog<MundoA
 		new Button(mainPanel)
 			.setCaption("Agregar")	
 			.onClick(new MessageSend(this.getModelObject(), "agregarObjetivo"))
-			.onClick(new MessageSend(this, "accept"));
+			.onClick(new MessageSend(this, "accept"))
+			.bindEnabledToProperty("explosionesPorColor.sePuedeAgregar");
 		
 		new Button(mainPanel)
 			.setCaption("Cancelar")

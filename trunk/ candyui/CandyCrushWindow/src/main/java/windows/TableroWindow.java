@@ -4,6 +4,7 @@ package windows;
 import java.awt.Color;
 
 import org.uqbar.arena.actions.MessageSend;
+import org.uqbar.arena.aop.windows.TransactionalDialog;
 import org.uqbar.arena.bindings.PropertyAdapter;
 import org.uqbar.arena.layout.ColumnLayout;
 import org.uqbar.arena.widgets.Button;
@@ -24,10 +25,10 @@ import Tp.CandyCrush.Movimiento;
 import Tp.CandyCrush.Partida;
 import Tp.CandyCrush.Tablero;
 
-public class TableroWindow extends SimpleWindow<PartidaAppModel>{
+public class TableroWindow extends TransactionalDialog<PartidaAppModel>{
 
-	public TableroWindow(WindowOwner parent) {
-		super(parent, new PartidaAppModel());
+	public TableroWindow(WindowOwner parent, PartidaAppModel app) {
+		super(parent, app); 
 		
 	}
 	
@@ -56,7 +57,7 @@ public class TableroWindow extends SimpleWindow<PartidaAppModel>{
 		selector.<ControlBuilder>bindValueToProperty("movimientoARealizar");
 		selector.bindItemsToProperty("movimientos")
 			.setAdapter(new PropertyAdapter(Movimiento.class, "nombre"));
-		
+	
 		new Button(movePanel)
 		.setCaption("Realizar")
 		.onClick(new MessageSend(this.getModelObject().getPartida().getNivelActual().getTablero(), "moverCaramelo(coordenadaActual.y,coordenadaActual.x,movimientoARealizar)")); 
@@ -90,7 +91,7 @@ public class TableroWindow extends SimpleWindow<PartidaAppModel>{
 				 new Column<Caramelo[]>(table)
                  //
                  .setTitle(Integer.toString(i)).setFixedSize(90)
-                 .bindContentsToTransformer(new TransformadorGetCaramelo(i));
+                 .bindContentsToTransformer(new TransformarGetCaramelo(i)); 
                 				 
 		}
 		

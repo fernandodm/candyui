@@ -1,6 +1,6 @@
 package appModel;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 
 import org.uqbar.commons.utils.Observable;
@@ -20,20 +20,23 @@ import Tp.CandyCrush.Tablero;
 public class PartidaAppModel {
 	
 	private Partida partida;
-	private ArrayList<Movimiento> movimientos = (ArrayList<Movimiento>) Arrays.asList(new Arriba(),new Derecha(),new Abajo(), new Izquierda());
-    private Coordenada coordenadaActual;
+	private List<Movimiento> movimientos =  Arrays.asList(new Arriba(),new Derecha(),new Abajo(), new Izquierda());
+    private Coordenada coordenadaActual; 
     private Movimiento movimientoARealizar;
-    private Tablero tablero = partida.getNivelActual().getTablero();
+    private Tablero tablero = partida.getNivelActual().getTablero(); 
     private int puntaje = partida.getNivelActual().getPuntaje();
     private Nivel nivelActual = partida.getNivelActual();
     private int movimientosFaltantes = partida.getCantMovimientosFaltantes();
-    private ArrayList<Objetivo> objetivos = (ArrayList<Objetivo>) partida.getNivelActual().getObjetivos();
+    private List<Objetivo> objetivos =  partida.getNivelActual().getObjetivos();
     
     
-    
-    
-    
-    public int getMovimientosFaltantes() {
+    public List<Objetivo> getObjetivos() {
+		return objetivos;
+	}
+	public void setObjetivos(List<Objetivo> objetivos) {
+		this.objetivos = objetivos;
+	}
+	public int getMovimientosFaltantes() {
 		return movimientosFaltantes;
 	}
 	public void setMovimientosFaltantes(int movimientosFaltantes) {
@@ -57,10 +60,10 @@ public class PartidaAppModel {
 	public void setPartida(Partida partida) {
 		this.partida = partida;
 	}
-	public ArrayList<Movimiento> getMovimientos() {
+	public List<Movimiento> getMovimientos() {
 		return movimientos;
 	}
-	public void setMovimientos(ArrayList<Movimiento> movimientos) {
+	public void setMovimientos(List<Movimiento> movimientos) {
 		this.movimientos = movimientos;
 	}
 	public Coordenada getCoordenadaActual() {
