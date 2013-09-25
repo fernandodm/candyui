@@ -11,7 +11,6 @@ import org.uqbar.arena.widgets.Panel;
 import org.uqbar.arena.windows.Dialog;
 import org.uqbar.arena.windows.WindowOwner;
 
-import Tp.CandyCrush.ExplosionesPorColor;
 import appModel.MundoAppModel;
 
 public class AgregarObjetivoWindow extends TransactionalDialog<MundoAppModel>{
@@ -52,15 +51,15 @@ public class AgregarObjetivoWindow extends TransactionalDialog<MundoAppModel>{
 	}
 	
 	public void agregarExplosionesPorColor(){
-		this.openDialog(new AgregarExplosionesPorColorWindow(this, this.getModelObject()));
+		this.openWindow(new AgregarExplosionesPorColorWindow(this, this.getModelObject()));
 		
 	}
 
 	public void agregarGrandesExplosiones(){
-		this.openDialog(new AgregarGrandesExplosionesWindow(this, this.getModelObject()));
+		this.openWindow(new AgregarGrandesExplosionesWindow(this, this.getModelObject()));
 	}
 	
-	protected void openDialog(Dialog<?> dialog) {
+	protected void openWindow(Dialog<?> dialog) {
 		dialog.onAccept(new MessageSend(this.getModelObject(), "agregarObjetivo"));
 		dialog.open();
 		

@@ -9,9 +9,7 @@ import org.uqbar.arena.widgets.Button;
 import org.uqbar.arena.widgets.Label;
 import org.uqbar.arena.widgets.Panel;
 import org.uqbar.arena.widgets.Selector;
-import org.uqbar.arena.widgets.TextBox;
 import org.uqbar.arena.windows.WindowOwner;
-import org.uqbar.lacar.ui.model.ControlBuilder;
 
 import appModel.MundoAppModel;
 
@@ -30,14 +28,14 @@ public class AgregarGrandesExplosionesWindow  extends TransactionalDialog<MundoA
 		Panel panel = new Panel(mainPanel);
 		panel.setLayout(new ColumnLayout(2));
 		
-		List<String> colores = this.getModelObject().getNivelEnConstruccion().getDificultad().getColores();
+		List<String> colores = this.getModelObject().getDificultad().getColores();
 		
 		this.getModelObject().setColores(colores);
 		
 		new Label(panel)
 			.setText("Color:");
 		
-		Selector<String> selectorColor = new Selector<String>(panel) //
+		Selector<String> selectorColor = new Selector<String>(panel) 
 				.allowNull(false);
 		selectorColor.bindValueToProperty("grandesExplosiones.color");
 		selectorColor.bindItemsToProperty("colores");
@@ -45,7 +43,7 @@ public class AgregarGrandesExplosionesWindow  extends TransactionalDialog<MundoA
 		new Label(panel)
 			.setText("Cantidad:");
 		
-		Selector<Integer> selectorCantidad = new Selector<Integer>(panel) //
+		Selector<Integer> selectorCantidad = new Selector<Integer>(panel) 
 				.allowNull(false);
 		selectorCantidad.bindValueToProperty("grandesExplosiones.cantidadGrandesExplosiones");
 		selectorCantidad.bindItemsToProperty("selectorExplosiones");
@@ -58,7 +56,8 @@ public class AgregarGrandesExplosionesWindow  extends TransactionalDialog<MundoA
 		new Button(mainPanel)
 			.setCaption("Agregar")	
 			.onClick(new MessageSend(this.getModelObject(), "agregarObjetivo"))
-			.onClick(new MessageSend(this, "accept"));
+			.onClick(new MessageSend(this, "accept"))
+			.bindEnabledToProperty("grandesExplosiones.sePuedeAgregar");;
 			
 		new Button(mainPanel)
 			.setCaption("Cancelar")

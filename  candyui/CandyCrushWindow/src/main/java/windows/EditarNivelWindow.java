@@ -27,8 +27,7 @@ public class EditarNivelWindow extends TransactionalDialog<MundoAppModel>{
 
 	@Override
 	protected void createFormPanel(Panel mainPanel) {
-		//((ConfiguracionWindow) this.getOwner()).datosParaEditarNivel(mainPanel);
-							
+								
 	    Panel nivelPanel = new Panel(mainPanel);
 	    
 	    new Label(nivelPanel)
@@ -46,7 +45,7 @@ public class EditarNivelWindow extends TransactionalDialog<MundoAppModel>{
 	    new Label(datosNivelPanel)
     		.setText("Nombre del nivel:");
 	    		    
-	    new TextBox(datosNivelPanel)
+	    new TextBox(datosNivelPanel)	
 	    	.setWidth(150)
     		.<ControlBuilder>bindValueToProperty("nivelSeleccionado.nombre");
 	    
@@ -73,6 +72,7 @@ public class EditarNivelWindow extends TransactionalDialog<MundoAppModel>{
 	        .setText("Filas:");
 	    
 	    new TextBox(tableroPanel)
+	    	.withFilter(new StringTextFilter())
 	    	.setWidth(30)
 	        .<ControlBuilder>bindValueToProperty("nivelSeleccionado.tablero.alto");
 	    
@@ -80,6 +80,7 @@ public class EditarNivelWindow extends TransactionalDialog<MundoAppModel>{
 	    	.setText("Columnas:");
     
 	    new TextBox(tableroPanel)
+	    	.withFilter(new StringTextFilter())
 	    	.setWidth(30)
 	    	.<ControlBuilder>bindValueToProperty("nivelSeleccionado.tablero.ancho");
 	    
@@ -87,6 +88,7 @@ public class EditarNivelWindow extends TransactionalDialog<MundoAppModel>{
         	.setText("Cantidad de movimientos:");
     
 	    new TextBox(tableroPanel)
+	    	.withFilter(new StringTextFilter())
 	    	.setWidth(30)
     		.<ControlBuilder>bindValueToProperty("nivelSeleccionado.cantidadMovimientos");
 	    
@@ -97,8 +99,9 @@ public class EditarNivelWindow extends TransactionalDialog<MundoAppModel>{
 			.setText("Cantidad de Puntos:");
     
 	    new TextBox(puntos)
+	    	.withFilter(new StringTextFilter())
 	    	.setWidth(80)
-			.<ControlBuilder>bindValueToProperty("nivelSeleccionado.puntajeMinimo");
+			.bindValueToProperty("nivelSeleccionado.puntajeMinimo");
 	}
 	
 	@Override
@@ -107,8 +110,9 @@ public class EditarNivelWindow extends TransactionalDialog<MundoAppModel>{
 		new Button(mainPanel)
 			.setCaption("Realizar cambios")
 			.onClick(new MessageSend(this.getModelObject(), "realizarCambios"))
-			;
+			.onClick(new MessageSend(this, "accept"));
 		
+
 	}
 
 }

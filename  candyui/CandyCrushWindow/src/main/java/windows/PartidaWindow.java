@@ -143,7 +143,7 @@ public class PartidaWindow extends SimpleWindow<PartidaAppModel>{
 				 new Column<Caramelo[]>(table)
                  //
                  .setTitle(Integer.toString(i)).setFixedSize(90)
-                 .bindContentsToTransformer(new TransformadorGetCaramelo(i));
+                 .bindContentsToTransformer(new TransformarGetCaramelo(i));
                 				 
 		}
 		

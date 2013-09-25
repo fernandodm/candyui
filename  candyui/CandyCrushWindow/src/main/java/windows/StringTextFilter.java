@@ -8,9 +8,12 @@ import com.uqbar.commons.StringUtils;
 public class StringTextFilter implements TextFilter {
 
 	@Override
-	public boolean accept(TextInputEvent event) {
+	
+		public boolean accept(TextInputEvent event) {
+
 			
-          return StringUtils.isNumeric(event.getPotentialTextResult());
+            return StringUtils.isNumeric(event.getPotentialTextResult()) 
+            		;
 
     }
 }
