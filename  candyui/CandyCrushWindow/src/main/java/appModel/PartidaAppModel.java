@@ -12,6 +12,7 @@ import Tp.CandyCrush.Derecha;
 import Tp.CandyCrush.Izquierda;
 import Tp.CandyCrush.Movimiento;
 import Tp.CandyCrush.Nivel;
+import Tp.CandyCrush.Objetivo;
 import Tp.CandyCrush.Partida;
 import Tp.CandyCrush.Tablero;
 
@@ -25,10 +26,20 @@ public class PartidaAppModel {
     private Tablero tablero = partida.getNivelActual().getTablero();
     private int puntaje = partida.getNivelActual().getPuntaje();
     private Nivel nivelActual = partida.getNivelActual();
+    private int movimientosFaltantes = partida.getCantMovimientosFaltantes();
+    private ArrayList<Objetivo> objetivos = (ArrayList<Objetivo>) partida.getNivelActual().getObjetivos();
     
     
     
-    public Nivel getNivelActual() {
+    
+    
+    public int getMovimientosFaltantes() {
+		return movimientosFaltantes;
+	}
+	public void setMovimientosFaltantes(int movimientosFaltantes) {
+		this.movimientosFaltantes = movimientosFaltantes;
+	}
+	public Nivel getNivelActual() {
 		return nivelActual;
 	}
 	public void setNivelActual(Nivel nivelActual) {
