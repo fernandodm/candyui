@@ -22,6 +22,7 @@ import appModel.PartidaAppModel;
 import Tp.CandyCrush.Caramelo;
 import Tp.CandyCrush.Dificultad;
 import Tp.CandyCrush.Movimiento;
+import Tp.CandyCrush.Objetivo;
 import Tp.CandyCrush.Partida;
 import Tp.CandyCrush.Tablero;
 
@@ -61,7 +62,7 @@ public class PartidaWindow extends SimpleWindow<PartidaAppModel>{
 			.setAdapter(new PropertyAdapter(Movimiento.class, "nombre"));
 		
 		new Button(movePanel)
-		.setCaption("Realizar")
+		.setCaption("Mover")
 		.onClick(new MessageSend(this, "chequearFinNivel")); 
 		
 		Panel pointPanel = new Panel(mainPanel);
@@ -69,8 +70,30 @@ public class PartidaWindow extends SimpleWindow<PartidaAppModel>{
 		
 		new Label(pointPanel)
 		.setText("PUNTOS:")
-		.setBackground(Color.ORANGE)
 		.bindValueToProperty("puntaje");
+		
+		new Label(pointPanel)
+		.setText("Movimientos restantes: ")
+		.bindValueToProperty("movimientosFaltantes");
+		
+		Panel tasksPanel = new Panel(mainPanel);
+		tasksPanel.setLayout(new ColumnLayout(2));
+		
+		new Label(tasksPanel)
+		.setText("OBJETIVOS:");
+		
+		Table<Objetivo> table = new Table<Objetivo>(tasksPanel, Objetivo.class);
+		table.setHeigth(80);
+		table.setWidth(200);
+		table.bindItemsToProperty("objetivos");
+		
+		Column<Objetivo> nomObjetivo = new Column<Objetivo>(table); 
+		nomObjetivo.setTitle("Objetivos")
+				.setFixedSize(200);
+		
+		nomObjetivo.bindContentsToTransformer(new TransformerGetObjetivo());
+		
+		
 	}
 	
 	public void chequearFinNivel(){
