@@ -22,6 +22,7 @@ import appModel.PartidaAppModel;
 import Tp.CandyCrush.Caramelo;
 import Tp.CandyCrush.Dificultad;
 import Tp.CandyCrush.Movimiento;
+import Tp.CandyCrush.Nivel;
 import Tp.CandyCrush.Objetivo;
 import Tp.CandyCrush.Partida;
 import Tp.CandyCrush.Tablero;
@@ -77,7 +78,7 @@ public class PartidaWindow extends SimpleWindow<PartidaAppModel>{
 		.bindValueToProperty("movimientosFaltantes");
 		
 		Panel tasksPanel = new Panel(mainPanel);
-		tasksPanel.setLayout(new ColumnLayout(2));
+		tasksPanel.setLayout(new ColumnLayout(3));
 		
 		new Label(tasksPanel)
 		.setText("OBJETIVOS:");
@@ -89,10 +90,15 @@ public class PartidaWindow extends SimpleWindow<PartidaAppModel>{
 		
 		Column<Objetivo> nomObjetivo = new Column<Objetivo>(table); 
 		nomObjetivo.setTitle("Objetivos")
-				.setFixedSize(200);
+				.setFixedSize(200)
+				.bindContentsToProperty("getDescripcion");
 		
+		Column<Objetivo> estado = new Column<Objetivo>(table); //
+		estado.setTitle("Estado")
+				.setFixedSize(50)
+				.bindContentsToProperty("seCumplioDescripcion");
+
 		nomObjetivo.bindContentsToTransformer(new TransformerGetObjetivo());
-		
 		
 	}
 	
