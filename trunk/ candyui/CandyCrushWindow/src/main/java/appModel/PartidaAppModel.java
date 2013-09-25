@@ -11,7 +11,9 @@ import Tp.CandyCrush.Coordenada;
 import Tp.CandyCrush.Derecha;
 import Tp.CandyCrush.Izquierda;
 import Tp.CandyCrush.Movimiento;
+import Tp.CandyCrush.Nivel;
 import Tp.CandyCrush.Partida;
+import Tp.CandyCrush.Tablero;
 
 @Observable
 public class PartidaAppModel {
@@ -20,7 +22,24 @@ public class PartidaAppModel {
 	private ArrayList<Movimiento> movimientos = (ArrayList<Movimiento>) Arrays.asList(new Arriba(),new Derecha(),new Abajo(), new Izquierda());
     private Coordenada coordenadaActual;
     private Movimiento movimientoARealizar;
+    private Tablero tablero = partida.getNivelActual().getTablero();
+    private int puntaje = partida.getNivelActual().getPuntaje();
+    private Nivel nivelActual = partida.getNivelActual();
     
+    
+    
+    public Nivel getNivelActual() {
+		return nivelActual;
+	}
+	public void setNivelActual(Nivel nivelActual) {
+		this.nivelActual = nivelActual;
+	}
+	public int getPuntaje() {
+		return puntaje;
+	}
+	public void setPuntaje(int puntaje) {
+		this.puntaje = puntaje;
+	}
 	public Partida getPartida() {
 		return partida;
 	}
@@ -45,7 +64,18 @@ public class PartidaAppModel {
 	public void setMovimientoARealizar(Movimiento movimientoARealizar) {
 		this.movimientoARealizar = movimientoARealizar;
 	}
-    
+	
+	public Tablero getTablero() {
+		return tablero;
+	}
+	public void setTablero(Tablero tablero) {
+		this.tablero = tablero;
+	}
+	public void moverCaramelo(){
+		
+		this.getTablero().moverCaramelo(this.getCoordenadaActual().getFila(), this.getCoordenadaActual().getColumna(), this.getMovimientoARealizar());
+		
+	}
     
     
 }
